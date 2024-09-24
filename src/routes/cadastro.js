@@ -1,0 +1,32 @@
+const express = require('express');
+const router = express.Router();
+const Usuario = require('../model/usuarioModel');
+const gerarHash = require('../util/gerarHash');
+
+router.post('/novo', async (req, res) => {
+    const Usr = req.body.Usr;
+    const NomeUsr = req.body.NomeUsr;
+    const SenhaUsr = req.body.SenhaUsr;
+    const Email = req.body.Email;
+
+    try {
+        const senhaHash = await gerarHash(SenhaUsr);
+
+        const novoUsuario = await Usuario.create({
+            Usr: Usr,
+            NomeUsr: NomeUsr,
+            SenhaUsr: senhaHash,
+            Email: Email
+        });
+
+        res.status(201).json({
+            usuario: novoUsuario,
+            msg: "Sucesso"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ error: 'Erro ao criar o usuário', detalhes: error });
+    }
+});
+
+module.exports = router;
