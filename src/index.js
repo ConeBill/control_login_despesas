@@ -5,9 +5,7 @@ const login = require('./routes/login');
 const cors = require('cors');
 require('dotenv').config();
 
-app.use(cors({
-    origin: process.env.ORIGIN
-}));
+app.use(cors());
 
 app.use(express.json());
 
