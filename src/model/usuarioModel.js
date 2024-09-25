@@ -20,6 +20,9 @@ const Usuario = sequelize.define('Usuario', {
     },
     Email: {
         type: DataTypes.STRING
+    },
+    NivelUsr: {
+        type: DataTypes.INTEGER
     }
 }, {
     tableName: 'usuarios',

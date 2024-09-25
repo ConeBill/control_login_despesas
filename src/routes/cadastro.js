@@ -16,7 +16,8 @@ router.post('/novo', async (req, res) => {
             Usr: Usr,
             NomeUsr: NomeUsr,
             SenhaUsr: senhaHash,
-            Email: Email
+            Email: Email,
+            NivelUsr: 1
         });
 
         res.status(201).json({
