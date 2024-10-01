@@ -4,32 +4,44 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../model/usuarioModel');
 
-const JWT_SECRET = 'baibibaibidobirulaibi2024';
-
 router.post('/', async (req, res) => {
     const { Usr, SenhaUsr } = req.body;
 
     try {
         const usuario = await Usuario.findOne({ where: { Usr: Usr } });
         if (!usuario) {
-            return res.status(404).json({ msg: 'Usuário não encontrado' });
+            return res.status(404).json({
+                status: 404,
+                msg: 'Usuário não encontrado'
+            });
         }
 
         const senhaValida = await bcrypt.compare(SenhaUsr, usuario.SenhaUsr);
         if (!senhaValida) {
-            return res.status(401).json({ msg: 'Senha inválida' });
+            return res.status(401).json({
+                status: 401,
+                msg: 'Senha inválida'
+            });
         }
 
         const token = jwt.sign(
             { id: usuario.id, Usr: usuario.Usr },
-            JWT_SECRET,
+            process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
 
-        res.status(200).json({ aut: token, usr: usuario });
+        res.status(200).json({
+            status: 200,
+            aut: token,
+            usr: usuario.Usr,
+            idusr: usuario.IdUsr
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Erro ao fazer login', detalhes: error });
+        res.status(500).json({
+            status: 500,
+            error: 'Erro ao fazer login',
+            detalhes: error
+        });
     }
 });
 

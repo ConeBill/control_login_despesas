@@ -21,12 +21,16 @@ router.post('/novo', async (req, res) => {
         });
 
         res.status(201).json({
+            status: 201,
             usuario: novoUsuario,
             msg: "Sucesso"
         });
     } catch (error) {
-        console.error(error);
-        res.status(400).json({ error: 'Erro ao criar o usuário', detalhes: error });
+        res.status(400).json({
+            status: 400,
+            error: 'Erro ao criar o usuário',
+            detalhes: error
+        });
     }
 });
 
